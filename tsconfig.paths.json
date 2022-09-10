@@ -6,6 +6,7 @@
       "@Routes/*": ["src/Routes/*"],
       "@Utils/*": ["src/Utils/*"],
       "@Components/*": ["src/Components/*"],
+      "@Apis/*": ["src/Apis/*"],
       "@Models/*": ["src/Models/*"]
     }
   }

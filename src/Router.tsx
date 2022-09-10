@@ -1,5 +1,5 @@
 import { lazy, Suspense } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 
 const Movie = lazy(() => import("@Routes/Movie"));
 const Tv = lazy(() => import("@Routes/Tv"));
@@ -34,6 +34,7 @@ const Router = () => {
           }
         />
         <Route path="/movies/:movieId" element={<Movie />} />
+        <Route path="/" element={<Navigate replace to="/movie" />} />
       </Routes>
     </>
   );
