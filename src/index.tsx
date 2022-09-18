@@ -60,9 +60,10 @@ table {
 body {
   font-weight: 300;
   font-family: 'Source Sans Pro', sans-serif;
-  color:black;
+  color:${(props) => props.theme.white.darker};
   line-height: 1.2;
-  
+  background-color: black;  
+  overflow-x:hidden // 하... 씨팔.. 이게 문제였다.... 이제 찾음.. 이것때문에.. 스크롤이 오버랩되었었다..ㅠ.ㅠ
 }
 a {
   text-decoration:none;

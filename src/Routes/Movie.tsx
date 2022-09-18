@@ -61,117 +61,19 @@ const Overview = styled.p`
   line-height: 1;
 `;
 
-const BannerBtn = styled.div`
-  font-weight: 800;
-  font-size: 18px;
-  width: 150px;
-  text-align: center;
-  color: black;
-  background-color: white;
-  border-radius: 5px;
-  margin: 5px 0;
-  padding: 5px;
-  margin-top: 15px;
-  cursor: pointer;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
-  &:hover {
-    background-color: black;
-    color: white;
-  }
-`;
-
-// 아래의 부분들 부터 다른 컴포넌트로 옮김 처리하기
-
-const Slider = styled.div`
-  position: relative;
-  top: -100px;
-`;
-
-const Row = styled(motion.div)`
-  display: grid;
-  gap: 5px;
-  grid-template-columns: repeat(6, 1fr);
-  position: absolute;
-  width: 100%;
-`;
-
-const Box = styled(motion.div)<{ bgPhoto: string }>`
-  background-color: white;
-  background-image: url(${(props) => props.bgPhoto});
-  background-size: cover;
-  background-position: center center;
-  height: 200px;
-  font-size: 66px;
-  cursor: pointer;
-  &:first-child {
-    transform-origin: center left;
-  }
-  &:last-child {
-    transform-origin: center right;
-  }
-`;
-
-const Info = styled(motion.div)`
-  padding: 10px;
-  background-color: ${(props) => props.theme.black.lighter};
-  opacity: 0;
-  position: absolute;
-  width: 100%;
-  bottom: 0;
-  h4 {
-    text-align: center;
-    font-size: 18px;
-  }
-`;
-
-const rowVariants = {
-  hidden: {
-    x: window.outerWidth + 5,
-  },
-  visible: {
-    x: 0,
-  },
-  exit: {
-    x: -window.outerWidth - 5,
-  },
-};
-
-const boxVariants = {
-  normal: {
-    scale: 1,
-  },
-  hover: {
-    scale: 1.3,
-    y: -80,
-    transition: {
-      delay: 0.5,
-      duaration: 0.1,
-      type: "tween",
-    },
-  },
-};
-
-const infoVariants = {
-  hover: {
-    opacity: 1,
-    transition: {
-      delay: 0.5,
-      duration: 0.1,
-      type: "tween",
-    },
-  },
-};
-
-const offset = 6;
-
 const Movie = () => {
-  const navigate = useNavigate();
-  const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:id");
-  console.log("bigMovieMatch: ", bigMovieMatch);
   const { data: nowData, isLoading: nowLoading } = useQuery<IGetMovies>(
     ["movies", "nowPlaying"],
     () => getMovies("now_playing")
   );
+  const { data: popularData, isLoading: popularLoading } = useQuery<IGetMovies>(
+    ["movies", "popular"],
+    () => getMovies("popular")
+  );
+  const { data: topRatedData, isLoading: topRatedLoading } =
+    useQuery<IGetMovies>(["movies", "top_rated"], () => getMovies("top_rated"));
+  const { data: upcomingData, isLoading: upcomingLoading } =
+    useQuery<IGetMovies>(["movies", "upcoming"], () => getMovies("upcoming"));
 
   useEffect(() => {
     if (nowData) {
@@ -194,7 +96,10 @@ const Movie = () => {
             </Title>
             <Overview>{nowData?.results[0].overview}</Overview>
           </Banner>
-          <MovieSlider dataType="Now" data={nowData} />
+          <MovieSlider dataType="now" data={nowData} />
+          <MovieSlider dataType="popular" data={popularData} />
+          <MovieSlider dataType="toprated" data={topRatedData} />
+          <MovieSlider dataType="upcoming" data={upcomingData} />
         </>
       )}
     </Wrapper>
