@@ -1,20 +1,20 @@
 {
   "files": {
-    "main.js": "/.github.io/nom_flix_ver1/static/js/main.bfd80bcf.js",
-    "static/js/994.bbca50ed.chunk.js": "/.github.io/nom_flix_ver1/static/js/994.bbca50ed.chunk.js",
-    "static/js/647.997bf21d.chunk.js": "/.github.io/nom_flix_ver1/static/js/647.997bf21d.chunk.js",
-    "static/js/541.7034da8c.chunk.js": "/.github.io/nom_flix_ver1/static/js/541.7034da8c.chunk.js",
-    "static/js/358.10161e2e.chunk.js": "/.github.io/nom_flix_ver1/static/js/358.10161e2e.chunk.js",
-    "static/js/158.419f3d8b.chunk.js": "/.github.io/nom_flix_ver1/static/js/158.419f3d8b.chunk.js",
-    "index.html": "/.github.io/nom_flix_ver1/index.html",
-    "main.bfd80bcf.js.map": "/.github.io/nom_flix_ver1/static/js/main.bfd80bcf.js.map",
-    "994.bbca50ed.chunk.js.map": "/.github.io/nom_flix_ver1/static/js/994.bbca50ed.chunk.js.map",
-    "647.997bf21d.chunk.js.map": "/.github.io/nom_flix_ver1/static/js/647.997bf21d.chunk.js.map",
-    "541.7034da8c.chunk.js.map": "/.github.io/nom_flix_ver1/static/js/541.7034da8c.chunk.js.map",
-    "358.10161e2e.chunk.js.map": "/.github.io/nom_flix_ver1/static/js/358.10161e2e.chunk.js.map",
-    "158.419f3d8b.chunk.js.map": "/.github.io/nom_flix_ver1/static/js/158.419f3d8b.chunk.js.map"
+    "main.js": "/insungson.github.io/nom_flix_ver1/static/js/main.fb956ba6.js",
+    "static/js/994.bbca50ed.chunk.js": "/insungson.github.io/nom_flix_ver1/static/js/994.bbca50ed.chunk.js",
+    "static/js/647.997bf21d.chunk.js": "/insungson.github.io/nom_flix_ver1/static/js/647.997bf21d.chunk.js",
+    "static/js/541.7034da8c.chunk.js": "/insungson.github.io/nom_flix_ver1/static/js/541.7034da8c.chunk.js",
+    "static/js/358.10161e2e.chunk.js": "/insungson.github.io/nom_flix_ver1/static/js/358.10161e2e.chunk.js",
+    "static/js/158.419f3d8b.chunk.js": "/insungson.github.io/nom_flix_ver1/static/js/158.419f3d8b.chunk.js",
+    "index.html": "/insungson.github.io/nom_flix_ver1/index.html",
+    "main.fb956ba6.js.map": "/insungson.github.io/nom_flix_ver1/static/js/main.fb956ba6.js.map",
+    "994.bbca50ed.chunk.js.map": "/insungson.github.io/nom_flix_ver1/static/js/994.bbca50ed.chunk.js.map",
+    "647.997bf21d.chunk.js.map": "/insungson.github.io/nom_flix_ver1/static/js/647.997bf21d.chunk.js.map",
+    "541.7034da8c.chunk.js.map": "/insungson.github.io/nom_flix_ver1/static/js/541.7034da8c.chunk.js.map",
+    "358.10161e2e.chunk.js.map": "/insungson.github.io/nom_flix_ver1/static/js/358.10161e2e.chunk.js.map",
+    "158.419f3d8b.chunk.js.map": "/insungson.github.io/nom_flix_ver1/static/js/158.419f3d8b.chunk.js.map"
   },
   "entrypoints": [
-    "static/js/main.bfd80bcf.js"
+    "static/js/main.fb956ba6.js"
   ]
 }
