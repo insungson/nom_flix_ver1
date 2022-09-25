@@ -37,7 +37,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "http:/insungson/.github.io/nom_flix_ver1/",
+  "homepage": "http:/insungson.github.io/nom_flix_ver1/",
   "eslintConfig": {
     "extends": [
       "react-app",
