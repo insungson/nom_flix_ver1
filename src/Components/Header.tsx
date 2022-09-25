@@ -1,7 +1,8 @@
-import { Link, useMatch } from "react-router-dom";
+import { Link, useMatch, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { motion, useAnimation, useScroll } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
+import { useForm } from "react-hook-form";
 
 const Nav = styled(motion.nav)`
   display: flex;
@@ -50,7 +51,7 @@ const Item = styled.li`
   }
 `;
 
-const Search = styled.span`
+const Search = styled.form`
   color: white;
   display: flex;
   align-items: center;
@@ -108,7 +109,18 @@ const navVariants = {
   },
 };
 
+interface IForm {
+  keyword: string;
+}
+
 const Header = () => {
+  const navigate = useNavigate();
+  const { register, handleSubmit } = useForm<IForm>();
+  const onValid = useCallback((data: IForm) => {
+    console.log("data: ", data);
+    navigate(`/search?keyword=${data.keyword}`);
+  }, []);
+
   const movieMatch = useMatch("/movie");
   const tvMatch = useMatch("/tv");
   const searchMatch = useMatch("/search");
@@ -181,10 +193,10 @@ const Header = () => {
         </Items>
       </Col>
       <Col>
-        <Search>
+        <Search onSubmit={handleSubmit(onValid)}>
           <motion.svg
             onClick={toggleSearch}
-            animate={{ x: searchOpen ? -185 : 0 }}
+            animate={{ x: searchOpen ? -210 : 0 }}
             transition={{ type: "liner" }}
             fill="currentColor"
             viewBox="0 0 20 20"
@@ -195,14 +207,15 @@ const Header = () => {
               d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
               clipRule="evenodd"
             ></path>
-            <Input
-              transition={{ type: "liner" }}
-              // animate={{ scaleX: searchOpen ? 1 : 0 }}
-              animate={inputAnimation}
-              initial={{ scaleX: 0 }}
-              placeholder="Search for movie or tv show..."
-            />
           </motion.svg>
+          <Input
+            {...register("keyword", { required: true, minLength: 2 })}
+            transition={{ type: "liner" }}
+            // animate={{ scaleX: searchOpen ? 1 : 0 }}
+            animate={inputAnimation}
+            initial={{ scaleX: 0 }}
+            placeholder="Search for movie or tv show"
+          />
         </Search>
       </Col>
     </Nav>

@@ -4,11 +4,11 @@ import { makeImagePath } from "@Utils/utils";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import {
-  getMovieCredit,
-  getMovieDetail,
-  IGetMovieCredit,
-  IGetMovieDetail,
-} from "@Apis/movieApi";
+  getTvCredit,
+  getTvDetail,
+  IGetTvCredit,
+  IGetTvDetail,
+} from "@Apis/tvShowApi";
 import { motion, useScroll } from "framer-motion";
 
 const Overlay = styled(motion.div)`
@@ -19,7 +19,7 @@ const Overlay = styled(motion.div)`
   background-color: rgba(0, 0, 0, 0.7);
 `;
 
-const BigMovie = styled(motion.div)`
+const BigTv = styled(motion.div)`
   position: absolute;
   width: 55vw;
   height: 60vh;
@@ -129,35 +129,29 @@ const CreditInfoCast = styled.div`
 
 interface IProps {
   dataType: string;
-  movieId: string;
+  tvId: string;
   isSearched: boolean;
 }
 
-const DetailMovie = ({ movieId, dataType, isSearched }: IProps) => {
-  console.log("movieId123: ", movieId);
+const DetailTv = ({ dataType, tvId, isSearched }: IProps) => {
+  console.log("isSearched: ", isSearched);
   const navigate = useNavigate();
-  const onOverayClick = () => (isSearched ? navigate(-1) : navigate("/movie"));
+  const onOverayClick = () => (isSearched ? navigate(-1) : navigate("/tv"));
 
   const { scrollY } = useScroll();
 
   // 캐스팅 정보 API data
   const { isLoading: isCreditLoading, data: creditData } =
-    useQuery<IGetMovieCredit>(["movie", `${dataType}_credit`], () =>
-      getMovieCredit(movieId)
+    useQuery<IGetTvCredit>(["movie", `${dataType}_credit`], () =>
+      getTvCredit(tvId)
     );
+  console.log("creditData: ", creditData);
   // 상세정보 API data
   const { isLoading: isDetailLoading, data: detailData } =
-    useQuery<IGetMovieDetail>(["movie", `${dataType}_detail`], () =>
-      getMovieDetail(movieId)
+    useQuery<IGetTvDetail>(["movie", `${dataType}_detail`], () =>
+      getTvDetail(tvId)
     );
-
-  useEffect(() => {
-    if (creditData) console.log("creditData: ", creditData);
-  }, [creditData]);
-  useEffect(() => {
-    if (detailData) console.log("detailData: ", detailData);
-  }, [detailData]);
-
+  console.log("detailData: ", detailData);
   const DirectorInfo = creditData?.crew.find(
     (item) => item.known_for_department === "Directing"
   );
@@ -169,7 +163,7 @@ const DetailMovie = ({ movieId, dataType, isSearched }: IProps) => {
 
   return (
     <>
-      {/* 로딩 화면 */}
+      {/* 로딩화면 */}
       {isCreditLoading && isDetailLoading ? (
         <>Loading.....</>
       ) : (
@@ -181,13 +175,13 @@ const DetailMovie = ({ movieId, dataType, isSearched }: IProps) => {
             animate={{ opacity: 1 }} // movieSlider 에서 사용한 Variants 속성 대신 비교를 위해 이렇게 사용하였다.
           />
           {/* 모달부분 */}
-          <BigMovie style={{ top: scrollY.get() + 100 }} layoutId={movieId}>
+          <BigTv style={{ top: scrollY.get() + 100 }} layoutId={tvId}>
             {detailData && creditData && (
               <>
                 <BigCover // movieSlider 에서 백그라운드 이미지 처리하는 방법과 비교해서 살펴보기
                   posterPath={makeImagePath(detailData.backdrop_path, "w500")}
                 />
-                <BigTitle>{`${detailData?.title}(${detailData?.original_title})`}</BigTitle>
+                <BigTitle>{`${detailData?.name}(${detailData?.original_name})`}</BigTitle>
                 <BigTitleGenre>
                   {detailData?.genres.map((genre) => (
                     <span key={genre.id}>{genre.name}</span>
@@ -232,11 +226,11 @@ const DetailMovie = ({ movieId, dataType, isSearched }: IProps) => {
                 </CreditsInfoBox>
               </>
             )}
-          </BigMovie>
+          </BigTv>
         </>
       )}
     </>
   );
 };
 
-export default DetailMovie;
+export default DetailTv;

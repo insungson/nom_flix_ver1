@@ -1,11 +1,10 @@
 import { useQuery } from "react-query";
 import styled from "styled-components";
-import { motion, AnimatePresence } from "framer-motion";
 import { IGetMovies, getMovies } from "@Apis/movieApi";
 import { makeImagePath } from "@Utils/utils";
-import { useState, useEffect } from "react";
-import { useMatch, PathMatch, useNavigate } from "react-router-dom";
+import { useEffect, useCallback } from "react";
 import MovieSlider from "@Components/movies/movieSlider";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
   height: 300vh;
@@ -37,6 +36,25 @@ const Banner = styled.div<{ bgPhoto: string }>`
   background-repeat: no-repeat;
 `;
 
+const BannerBtn = styled.div`
+  font-weight: 800;
+  font-size: 18px;
+  width: 150px;
+  text-align: center;
+  color: white;
+  background-color: ${(props) => props.theme.white};
+  border-radius: 5px;
+  margin: 5px 0;
+  padding: 5px;
+  margin-top: 15px;
+  cursor: pointer;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.06);
+  &:hover {
+    background-color: white;
+    color: ${(props) => props.theme.black.darker};
+  }
+`;
+
 const Title = styled.h2`
   display: flex;
   align-items: center;
@@ -62,6 +80,8 @@ const Overview = styled.p`
 `;
 
 const Movie = () => {
+  const navigate = useNavigate();
+
   const { data: nowData, isLoading: nowLoading } = useQuery<IGetMovies>(
     ["movies", "nowPlaying"],
     () => getMovies("now_playing")
@@ -81,6 +101,13 @@ const Movie = () => {
     }
   }, [nowData]);
 
+  const onClickDetailBtn = useCallback(
+    (movieId: string) => {
+      navigate(`/movies/${movieId}`);
+    },
+    [navigate]
+  );
+
   return (
     <Wrapper>
       {nowLoading ? (
@@ -95,6 +122,11 @@ const Movie = () => {
               <span id="vote">★ {nowData?.results[0].vote_average}</span>
             </Title>
             <Overview>{nowData?.results[0].overview}</Overview>
+            <BannerBtn
+              onClick={() => onClickDetailBtn(nowData?.results[0]?.id + "")}
+            >
+              See Detail
+            </BannerBtn>
           </Banner>
           <MovieSlider dataType="now" data={nowData} />
           <MovieSlider dataType="popular" data={popularData} />

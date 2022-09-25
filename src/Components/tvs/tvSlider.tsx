@@ -2,11 +2,11 @@ import styled from "styled-components";
 import { AnimatePresence, motion, useScroll, Variants } from "framer-motion";
 import { useState, useCallback, useEffect } from "react";
 import { PathMatch, useMatch, useNavigate } from "react-router-dom";
-import { IGetMovies } from "@Apis/movieApi";
+import { IGetTv } from "@Apis/tvShowApi";
 import { makeImagePath } from "@Utils/utils";
 import nextImg from "@images/next.png";
 import prevImg from "@images/prev.png";
-import DetailMovie from "./detailMovie";
+import DetailTv from "./detailTv";
 
 const Slider = styled.div`
   position: relative;
@@ -166,51 +166,40 @@ const offset = 6;
 
 interface IProps {
   dataType: string;
-  data?: IGetMovies;
+  data?: IGetTv;
   isLoading?: boolean;
 }
 
-const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
+const TvSlider = ({ dataType, data, isLoading = false }: IProps) => {
   const [title, setTitle] = useState("");
   const [isNext, setIsNext] = useState(true);
 
-  // movie url 접근 or search url 접근인지 구분하기 위한 state
+  // tv url 접근 or search url 접근인지 구분하기 위한 state
   const [isSearched, setIsSearched] = useState(false);
 
-  // https://www.framer.com/docs/examples/#exit-animations
-  // 위의 예시 참조하기.
-  // 왼쪽/오른쪽 방향 전환을 위해선 custom, variants 의 x 축 진입과 나갈때도 이에 맞게 처리해야 한다.
   const [hoverCardId, setHoverCardId] = useState<string | null>(null);
 
-  // 클릭시 해당 영화 모달 창
-  const bigMovieMatch: PathMatch<string> | null = useMatch("/movies/:id");
-  // search 에서 해당 slider 모듈을 사용할 경우
-  const bigSearchedMovieMatch: PathMatch<string> | null = useMatch(
-    "/search/movies/:movieId"
-  );
-  console.log("bigSearchedMovieMatch: ", bigSearchedMovieMatch);
-
-  useEffect(() => {
-    console.log("[hoverCardId: ", hoverCardId);
-  }, [hoverCardId]);
-
+  // 클릭시 해당 티비 모달 창
+  const bigTvMatch: PathMatch<string> | null = useMatch("/tv/:id");
+  console.log("bigTvMatch: ", bigTvMatch);
+  // search 에서 해당 silder 모듈을 사용할 경우
+  const bigSearchedTvMatch: PathMatch<string> | null =
+    useMatch("/search/tv/:tvId");
+  console.log("bigSearchedTvMatch: ", bigSearchedTvMatch);
   useEffect(() => {
     switch (dataType) {
-      case "upcoming":
-        setIsSearched(false);
-        return setTitle("UpComing");
-      case "now":
-        setIsSearched(false);
-        return setTitle("Now");
       case "popular":
         setIsSearched(false);
         return setTitle("Popular");
-      case "toprated":
+      case "onair":
+        setIsSearched(false);
+        return setTitle("OnAir");
+      case "top_rated":
         setIsSearched(false);
         return setTitle("TopRated");
       case "search":
         setIsSearched(true);
-        return setTitle("Searched Movie");
+        return setTitle("Searched TV Show");
       default:
         break;
     }
@@ -236,7 +225,7 @@ const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
       setIndex((prev) => (prev === maxIndex ? 0 : prev + 1));
     }
   }, [data, toggleLeaving, leaving]);
-  // 슬라이스 감소 처리
+  // 슬라이드 감소 처리
   const decreaseIndex = useCallback(() => {
     if (data) {
       if (leaving) return;
@@ -249,11 +238,11 @@ const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
   }, [data, toggleLeaving, leaving]);
 
   const onBoxClicked = useCallback(
-    (movieId: number) => {
+    (tvId: number) => {
       if (isSearched) {
-        navigate(`/search/movies/${movieId}`);
+        navigate(`/search/tv/${tvId}`);
       } else {
-        navigate(`/movies/${movieId}`);
+        navigate(`/tv/${tvId}`);
       }
     },
     [navigate, isSearched]
@@ -282,34 +271,34 @@ const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
                 {data?.results
                   .slice(1)
                   .slice(offset * index, offset * index + offset)
-                  .map((movie) => (
+                  .map((tv) => (
                     <Box
-                      layoutId={movie.id + dataType + ""} // 문자열로 처리하기 위한 '' 처리 + 다른 곳에서 같은 movieId 가 사용될 수 있기 때문에 dataType도 사용함.
-                      key={movie.id}
+                      layoutId={tv.id + dataType + ""} // 문자열로 처리하기 위한 '' 처리 + 다른 곳에서 같은 movieId 가 사용될 수 있기 때문에 dataType도 사용함.
+                      key={tv.id}
                       variants={boxVariants}
                       whileHover="hover"
                       initial="normal"
-                      onClick={() => onBoxClicked(movie.id)}
+                      onClick={() => onBoxClicked(tv.id)}
                       transition={{ type: "tween" }}
-                      bgphoto={makeImagePath(movie.backdrop_path, "w500")}
-                      onMouseEnter={() => setHoverCardId(movie.id + "")}
+                      bgphoto={makeImagePath(tv.backdrop_path, "w500")}
+                      onMouseEnter={() => setHoverCardId(tv.id + "")}
                       onMouseLeave={() => setHoverCardId(null)}
                     >
-                      {movie.id + "" === hoverCardId ? (
+                      {tv.id + "" === hoverCardId ? (
                         ""
                       ) : (
                         <h4>
-                          {movie?.title?.toUpperCase()} ({movie.original_title})
+                          {tv?.name?.toUpperCase()} ({tv?.original_name})
                         </h4>
                       )}
                       <Info variants={infoVariants}>
                         <h4>
-                          {movie?.title?.toUpperCase()} ({movie.original_title})
+                          {tv?.name?.toUpperCase()} ({tv?.original_name})
                         </h4>
                         <BoxInfos variants={boxInfosVariants}>
                           <span id="vote">
-                            {movie.vote_average
-                              ? `★ ${movie.vote_average.toFixed(1)}`
+                            {tv?.vote_average
+                              ? `★ ${tv.vote_average.toFixed(1)}`
                               : "No Rating Infos"}
                           </span>
                         </BoxInfos>
@@ -333,19 +322,18 @@ const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
               onClick={increaseIndex}
             />
           </Slider>
-
-          {/* 영화 확대 및 상세 정보창 */}
+          {/* TV 확대 및 상세 정보창 */}
           <AnimatePresence>
-            {bigMovieMatch && (
-              <DetailMovie
-                movieId={bigMovieMatch?.params?.id + ""}
+            {bigTvMatch && (
+              <DetailTv
+                tvId={bigTvMatch?.params?.id + ""}
                 dataType={dataType}
                 isSearched={isSearched}
               />
             )}
-            {bigSearchedMovieMatch && (
-              <DetailMovie
-                movieId={bigSearchedMovieMatch?.params?.movieId + ""}
+            {bigSearchedTvMatch && (
+              <DetailTv
+                tvId={bigSearchedTvMatch?.params?.tvId + ""}
                 dataType={dataType}
                 isSearched={isSearched}
               />
@@ -357,4 +345,4 @@ const MovieSlider = ({ dataType, data, isLoading = false }: IProps) => {
   );
 };
 
-export default MovieSlider;
+export default TvSlider;

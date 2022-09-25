@@ -33,6 +33,23 @@ const Router = () => {
         }
       />
       <Route path="/movies/:movieId" element={<Movie />} />
+      <Route path="/tv/:tvId" element={<Tv />} />
+      <Route
+        path="/search/tv/:tvId"
+        element={
+          <Suspense fallback={<>loading...</>}>
+            <Search />
+          </Suspense>
+        }
+      />
+      <Route
+        path="/search/movies/:movieId"
+        element={
+          <Suspense fallback={<>loading...</>}>
+            <Search />
+          </Suspense>
+        }
+      />
       <Route path="/" element={<Navigate replace to="/movie" />} />
     </Routes>
   );
